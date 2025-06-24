@@ -89,11 +89,13 @@
         alert('Selecione o tipo de letra antes de continuar.');
         return;
       }
-      const mensagem = encodeURIComponent(`Olá! Gostaria de um orçamento para:
+      const mensagem = encodeURIComponent(
+        `Olá! Gostaria de um orçamento para:
 
 Tipo: ${letraSelecionada}
 
-Aguardarei o retorno.`);
+Aguardarei o retorno.`
+      );
       window.open(`https://wa.me/553433363486?text=${mensagem}`, '_blank');
     }
   </script>
