@@ -74,26 +74,44 @@
     </div>
   </div>
 
+  <h2>2️⃣ Acrílico/LED</h2>
+  <label>
+    <input type="checkbox" id="acrilicoLed" checked />
+    Incluir Acrílico/LED
+  </label>
+
   <button class="button" onclick="irParaWhatsApp()">Avançar</button>
 
   <script>
     let letraSelecionada = '';
+    const acrilicoLedCheckbox = document.getElementById('acrilicoLed');
+
     function selecionarLetra(card, tipo) {
       document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
       letraSelecionada = tipo;
+      if (letraSelecionada === 'Galvanizado com Filete') {
+        acrilicoLedCheckbox.checked = true;
+      }
     }
+
+    acrilicoLedCheckbox.addEventListener('change', () => {
+      if (letraSelecionada === 'Galvanizado com Filete' && !acrilicoLedCheckbox.checked) {
+        alert('Galvanizado com Filete requer Acrílico/LED.');
+        acrilicoLedCheckbox.checked = true;
+      }
+    });
 
     function irParaWhatsApp() {
       if (!letraSelecionada) {
         alert('Selecione o tipo de letra antes de continuar.');
         return;
       }
-      const mensagem = encodeURIComponent(`Olá! Gostaria de um orçamento para:
-
-Tipo: ${letraSelecionada}
-
-Aguardarei o retorno.`);
+      if (letraSelecionada === 'Galvanizado com Filete' && !acrilicoLedCheckbox.checked) {
+        alert('Galvanizado com Filete requer Acrílico/LED.');
+        return;
+      }
+      const mensagem = encodeURIComponent(`Olá! Gostaria de um orçamento para:\n\nTipo: ${letraSelecionada}\nAcrílico/LED: ${acrilicoLedCheckbox.checked ? 'Sim' : 'Não'}\n\nAguardarei o retorno.`);
       window.open(`https://wa.me/553433363486?text=${mensagem}`, '_blank');
     }
   </script>
