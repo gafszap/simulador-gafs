@@ -74,14 +74,76 @@
     </div>
   </div>
 
+  <h2>2️⃣ Escolha a faixa de tamanho</h2>
+  <div id="tamanhoRange">
+    <label><input type="radio" name="tamanho" value="Pequeno" onclick="selecionarTamanho('Pequeno')"/> Até 20cm</label><br/>
+    <label><input type="radio" name="tamanho" value="Médio" onclick="selecionarTamanho('Médio')"/> 21cm - 50cm</label><br/>
+    <label><input type="radio" name="tamanho" value="Grande" onclick="selecionarTamanho('Grande')"/> Acima de 50cm</label>
+  </div>
+
+  <h2>3️⃣ Extras</h2>
+  <div id="extras">
+    <label><input type="checkbox" value="Iluminação LED" onclick="toggleExtra(this)"/> Iluminação LED</label><br/>
+    <label><input type="checkbox" value="Pintura Especial" onclick="toggleExtra(this)"/> Pintura Especial</label>
+  </div>
+
+  <h2>Total estimado: <span id="total">R$ 0,00</span></h2>
+
   <button class="button" onclick="irParaWhatsApp()">Avançar</button>
 
   <script>
     let letraSelecionada = '';
+    let tamanhoSelecionado = '';
+    let extrasSelecionados = [];
+
+    const precosLetra = {
+      'Inox Polido': 100,
+      'Galvanizado': 80,
+      'Galvanizado com Filete': 120,
+      'PVC Expandido': 50
+    };
+
+    const precosTamanho = {
+      'Pequeno': 1,
+      'Médio': 1.5,
+      'Grande': 2
+    };
+
+    const precosExtras = {
+      'Iluminação LED': 40,
+      'Pintura Especial': 30
+    };
+
     function selecionarLetra(card, tipo) {
       document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
       letraSelecionada = tipo;
+      calcularTotal();
+    }
+
+    function selecionarTamanho(tamanho) {
+      tamanhoSelecionado = tamanho;
+      calcularTotal();
+    }
+
+    function toggleExtra(checkbox) {
+      if (checkbox.checked) {
+        extrasSelecionados.push(checkbox.value);
+      } else {
+        extrasSelecionados = extrasSelecionados.filter(e => e !== checkbox.value);
+      }
+      calcularTotal();
+    }
+
+    function calcularTotal() {
+      if (!letraSelecionada || !tamanhoSelecionado) {
+        document.getElementById('total').innerText = 'R$ 0,00';
+        return 0;
+      }
+      let total = precosLetra[letraSelecionada] * precosTamanho[tamanhoSelecionado];
+      extrasSelecionados.forEach(extra => total += precosExtras[extra]);
+      document.getElementById('total').innerText = `R$ ${total.toFixed(2)}`;
+      return total;
     }
 
     function irParaWhatsApp() {
@@ -89,11 +151,13 @@
         alert('Selecione o tipo de letra antes de continuar.');
         return;
       }
-      const mensagem = encodeURIComponent(`Olá! Gostaria de um orçamento para:
-
-Tipo: ${letraSelecionada}
-
-Aguardarei o retorno.`);
+      if (!tamanhoSelecionado) {
+        alert('Selecione a faixa de tamanho antes de continuar.');
+        return;
+      }
+      const total = calcularTotal();
+      const extras = extrasSelecionados.length ? extrasSelecionados.join(', ') : 'Nenhum';
+      const mensagem = encodeURIComponent(`Olá! Gostaria de um orçamento para:\n\nTipo: ${letraSelecionada}\nTamanho: ${tamanhoSelecionado}\nExtras: ${extras}\nTotal estimado: R$ ${total.toFixed(2)}\n\nAguardarei o retorno.`);
       window.open(`https://wa.me/553433363486?text=${mensagem}`, '_blank');
     }
   </script>
