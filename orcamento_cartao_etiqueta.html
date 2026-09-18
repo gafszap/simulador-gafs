@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cartão Fosco + Etiqueta | GAFS</title>
+  <style>
+    :root {
+      --gold: #f4d03f;
+      --dark: #111;
+      --gray-bg: #eef0f2;
+      --border: #ddd;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--gray-bg);
+      font-family: Arial, Helvetica, sans-serif;
+      color: #222;
+      padding: 30px 16px;
+    }
+    .sheet {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    header.brand {
+      background: var(--dark);
+      color: #fff;
+      padding: 24px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    header.brand h1 {
+      margin: 0;
+      color: var(--gold);
+      font-size: 26px;
+      letter-spacing: 1px;
+    }
+    header.brand .doc-type {
+      font-size: 13px;
+      color: #ccc;
+      margin-top: 4px;
+    }
+    header.brand .meta {
+      text-align: right;
+      font-size: 13px;
+      color: #ddd;
+    }
+    .content { padding: 28px 32px; }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 24px;
+      margin-bottom: 24px;
+    }
+    .field label {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: #888;
+      margin-bottom: 4px;
+    }
+    .field input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 8px 10px;
+      font-size: 14px;
+      font-family: inherit;
+      color: #222;
+    }
+    table.items {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    table.items th {
+      background: #f7f7f7;
+      text-align: left;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #666;
+      padding: 10px;
+      border-bottom: 2px solid var(--border);
+    }
+    table.items td {
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      vertical-align: top;
+    }
+    table.items input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 8px;
+      font-family: inherit;
+      font-size: 14px;
+    }
+    .cliente-input { font-weight: bold; }
+    .qty-input { width: 70px; text-align: center; }
+    .price-input { width: 100px; text-align: right; }
+    .subtotal-cell { text-align: right; font-weight: bold; white-space: nowrap; }
+    .totals {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 24px;
+    }
+    .totals table { border-collapse: collapse; }
+    .totals td { padding: 6px 12px; font-size: 14px; }
+    .totals .total-row td {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--dark);
+      border-top: 2px solid var(--dark);
+    }
+    .conditions {
+      background: #fafafa;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .conditions label {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: #888;
+      margin-bottom: 4px;
+    }
+    .conditions input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 8px;
+      font-family: inherit;
+      font-size: 14px;
+      color: #222;
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      padding: 0 32px 28px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      border: none;
+      padding: 12px 24px;
+      font-size: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .btn-primary { background: #00c98d; color: #fff; }
+    .btn-secondary { background: #fff; color: var(--dark); border: 1px solid var(--border); }
+    .hint {
+      font-size: 12px;
+      color: #999;
+      text-align: center;
+      padding-bottom: 20px;
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .sheet { box-shadow: none; border-radius: 0; max-width: 100%; }
+      .actions, .hint { display: none; }
+      .field input, .conditions input, table.items input {
+        border: none;
+        padding: 2px 0;
+      }
+      header.brand { background: var(--dark) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sheet">
+    <header class="brand">
+      <div>
+        <h1>GAFS</h1>
+        <div class="doc-type">Comunicação Visual · Orçamento / Produção</div>
+      </div>
+      <div class="meta">
+        Data: <span id="dataAtual"></span><br/>
+        WhatsApp: (34) 3336-3486
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="info-grid">
+        <div class="field">
+          <label>Lote de Produção</label>
+          <input type="text" id="referencia" value="Cartão Fosco c/ Verniz Localizado + Etiqueta"/>
+        </div>
+        <div class="field">
+          <label>Responsável</label>
+          <input type="text" id="responsavel" value=""/>
+        </div>
+      </div>
+
+      <table class="items">
+        <thead>
+          <tr>
+            <th style="width:16%">Cliente</th>
+            <th style="width:38%">Descrição</th>
+            <th style="width:12%">Qtd. (milheiros)</th>
+            <th style="width:16%">Valor Unit. (R$)</th>
+            <th style="width:18%">Subtotal (R$)</th>
+          </tr>
+        </thead>
+        <tbody id="itensBody"></tbody>
+      </table>
+
+      <div class="totals">
+        <table>
+          <tr class="total-row">
+            <td>Total</td>
+            <td id="totalGeral">R$ 0,00</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="conditions">
+        <div>
+          <label>Forma de entrega</label>
+          <input type="text" id="entrega" value="" placeholder="A definir"/>
+        </div>
+        <div>
+          <label>Prazo de entrega</label>
+          <input type="text" id="prazo" value="" placeholder="A definir"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+      <button class="btn btn-secondary" onclick="copiarResumo()">📋 Copiar resumo p/ WhatsApp</button>
+    </div>
+    <div class="hint">Valores por milheiro disponíveis no sistema (Mubisys) — preencha os campos "Valor Unit." para calcular o total automaticamente.</div>
+  </div>
+
+  <script>
+    const itens = [
+      { cliente: 'Tag', desc: 'Cartão Fosco com Verniz Localizado (1 milheiro = 1.000 un.)', qtd: 1, valor: 0 },
+      { cliente: 'Tag', desc: 'Acabamento adicional', qtd: 1, valor: 70 },
+      { cliente: 'Maison', desc: 'Cartão Fosco com Verniz Localizado (1 milheiro = 1.000 un.)', qtd: 1, valor: 0 },
+      { cliente: 'REFRIAR', desc: 'Cartão Fosco com Verniz Localizado (1 milheiro = 1.000 un.)', qtd: 1, valor: 0 },
+      { cliente: '', desc: 'Etiqueta Adesivo Corte e Contorno - Cartela Redonda 5cm (1 milheiro = 1.000 un.)', qtd: 1, valor: 0 }
+    ];
+
+    function formatarMoeda(v) {
+      return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function renderItens() {
+      const tbody = document.getElementById('itensBody');
+      tbody.innerHTML = '';
+      itens.forEach((item, i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><input type="text" class="cliente-input" value="${item.cliente}" placeholder="Cliente" onchange="atualizarItem(${i}, 'cliente', this.value)"/></td>
+          <td>${item.desc}</td>
+          <td><input type="number" min="1" step="1" class="qty-input" value="${item.qtd}" onchange="atualizarItem(${i}, 'qtd', this.value)"/></td>
+          <td><input type="number" min="0" step="0.01" class="price-input" value="${item.valor || ''}" placeholder="0,00" onchange="atualizarItem(${i}, 'valor', this.value)"/></td>
+          <td class="subtotal-cell" id="subtotal-${i}">${formatarMoeda(item.qtd * item.valor)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      atualizarTotal();
+    }
+
+    function atualizarItem(i, campo, valor) {
+      itens[i][campo] = (campo === 'cliente') ? valor : (parseFloat(valor) || 0);
+      document.getElementById(`subtotal-${i}`).textContent = formatarMoeda(itens[i].qtd * itens[i].valor);
+      atualizarTotal();
+    }
+
+    function atualizarTotal() {
+      const total = itens.reduce((soma, item) => soma + (item.qtd * item.valor), 0);
+      document.getElementById('totalGeral').textContent = formatarMoeda(total);
+    }
+
+    function copiarResumo() {
+      const referencia = document.getElementById('referencia').value;
+      const responsavel = document.getElementById('responsavel').value;
+      const entrega = document.getElementById('entrega').value || 'A definir';
+      const prazo = document.getElementById('prazo').value || 'A definir';
+      const total = itens.reduce((soma, item) => soma + (item.qtd * item.valor), 0);
+      const linhas = itens.map(item => `- [${item.cliente || 'A definir'}] ${item.desc} | Qtd: ${item.qtd} | Unit: ${formatarMoeda(item.valor)} | Subtotal: ${formatarMoeda(item.qtd * item.valor)}`).join('\n');
+      const texto = `*PRODUÇÃO/ORÇAMENTO GAFS*\nLote: ${referencia}\nResponsável: ${responsavel || 'A definir'}\nData: ${document.getElementById('dataAtual').textContent}\n\n${linhas}\n\n*Total: ${formatarMoeda(total)}*\n\nForma de entrega: ${entrega}\nPrazo de entrega: ${prazo}`;
+      navigator.clipboard.writeText(texto).then(() => {
+        alert('Resumo copiado! Agora é só colar no WhatsApp.');
+      }).catch(() => {
+        alert('Não foi possível copiar automaticamente. Selecione o texto manualmente.');
+      });
+    }
+
+    document.getElementById('dataAtual').textContent = new Date().toLocaleDateString('pt-BR');
+    renderItens();
+  </script>
+</body>
+</html>
